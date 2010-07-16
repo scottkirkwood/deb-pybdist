@@ -1,0 +1,22 @@
+Source: pybdist
+Section: python
+Priority: optional
+Maintainer: Scott Kirkwood <scott@forusers.com>
+Build-Depends: cdbs, debhelper (>= 7), python (>= 2.4), python-support
+Standards-Version: 3.8.4
+Homepage: http://code.google.com/p/pybdist/
+Vcs-Hg: https://pybdist.googlecode.com/hg/
+Vcs-Browser: http://pybdist.googlecode.com/hg/
+
+Package: python-bdist
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends},${python:Depends},
+ fakeroot,lintian,build-essential,python-twitter,python-simplejson,pychecker,
+ help2man,python-docutils,python-nose,aspell,aspell-en,python-polib
+Description: A python library to make it easy to release versions
+ PyBDist is a selfhosting library to make it easier and faster to launch
+ version.  In the spirit of release often, release early.
+ .
+ Currently this project is not very flexible, you must put a great deal of
+ information into your setup.py program and have certain files in certain
+ locations.

@@ -1,0 +1,3 @@
+version=3
+http://code.google.com/p/pybdist/downloads/list \
+  http://pybdist[.]googlecode[.]com/files/pybdist_([0-9.]+)[.]tar[.]gz

@@ -1,0 +1,82 @@
+pybdist (0.2.11-1) unstable; urgency=low
+
+  * Support for internationalization of man pages.
+
+ -- Scott Kirkwood <scott@forusers.com>  Fri, 16 Jul 2010 10:05:28 +0300
+
+pybdist (0.2.10-1) unstable; urgency=low
+
+  * Added code for creating gettext internationalization.
+
+ -- Scott Kirkwood <scott@forusers.com>  Thu, 15 Jul 2010 20:54:32 +0300
+
+pybdist (0.2.9-1) unstable; urgency=low
+
+  * Added pypi version check.
+  * Added mercurial commit and push checks.
+  * Check for rst errors in setup description.
+  * Spell check setup file.
+
+ -- Scott Kirkwood <scott@forusers.com>  Wed, 14 Jul 2010 13:55:23 +0300
+
+pybdist (0.2.8-1) unstable; urgency=low
+
+  * Added nosetests.
+  * Added fixup_setup() method which can fill in missing variables as required.
+
+ -- Scott Kirkwood <scott@forusers.com>  Tue, 13 Jul 2010 16:59:03 +0300
+
+pybdist (0.2.7-1) unstable; urgency=low
+
+  * Have freshmeat use alternate name 'FRESHMEAT' if found in setup.py.
+
+ -- Scott Kirkwood <scott@forusers.com>  Tue, 13 Jul 2010 16:05:16 +0300
+
+pybdist (0.2.6-1) unstable; urgency=low
+
+  * Py checker does subdirectories.
+
+ -- Scott Kirkwood <scott@forusers.com>  Tue, 13 Jul 2010 10:55:10 +0300
+
+pybdist (0.2.5-1) unstable; urgency=low
+
+  * Throwing exceptions instead of sys.exit()
+  * Better error when debian/changelog is empty.
+
+ -- Scott Kirkwood <scott@forusers.com>  Sun, 11 Jul 2010 12:03:57 +0300
+
+pybdist (0.2.4-1) unstable; urgency=low
+
+  * Add auto_file to upate version information automatically on --check.
+
+ -- Scott Kirkwood <scott@forusers.com>  Fri, 09 Jul 2010 12:43:51 +0300
+
+pybdist (0.2.3-1) unstable; urgency=low
+
+  * Problem with google code uploading.
+
+ -- Scott Kirkwood <scott@forusers.com>  Wed, 07 Jul 2010 23:10:00 -0300
+
+pybdist (0.2.2-1) unstable; urgency=low
+
+  * Addtional changes to make it work with keymon.
+
+ -- Scott Kirkwood <scott@forusers.com>  Sun, 04 Jul 2010 23:10:00 -0300
+
+pybdist (0.2.1-1) unstable; urgency=low
+
+  * Bad release, missing files in manifest. Fixed in 0.2.1.
+  * Automatically removes 'Featured' flag for old files on code.google.com.
+  * Added pychecker test.
+  * Changed the function names to use underscores, this will break old code!
+    I've realized that Google's public Python style guide is a bit different
+    than the internal style guide.
+  * Added .pylintrc.
+
+ -- Scott Kirkwood <scott@forusers.com>  Sun, 04 Jul 2010 09:39:00 -0300
+
+pybdist (0.2.0-1) unstable; urgency=low
+
+  * Initial release.
+
+ -- Scott Kirkwood <scott@forusers.com>  Fri, 02 Jul 2010 21:55:19 -0300
