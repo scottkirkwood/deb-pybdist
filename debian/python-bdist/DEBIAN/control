@@ -1,0 +1,17 @@
+Package: python-bdist
+Source: pybdist
+Version: 0.2.11-1
+Architecture: all
+Maintainer: Scott Kirkwood <scott@forusers.com>
+Installed-Size: 152
+Depends: python (>= 2.5), python-support (>= 0.90.0), fakeroot, lintian, build-essential, python-twitter, python-simplejson, pychecker, help2man, python-docutils, python-nose, aspell, aspell-en, python-polib
+Section: python
+Priority: optional
+Homepage: http://code.google.com/p/pybdist/
+Description: A python library to make it easy to release versions
+ PyBDist is a selfhosting library to make it easier and faster to launch
+ version.  In the spirit of release often, release early.
+ .
+ Currently this project is not very flexible, you must put a great deal of
+ information into your setup.py program and have certain files in certain
+ locations.
