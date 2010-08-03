@@ -8,23 +8,24 @@ NAME = 'pybdist'
 DIR = 'src/pybdist'
 gettext.install(NAME, DIR + 'locale')
 
-VER = '0.2.11'
+VER = '0.2.13'
 PY_NAME = 'pybdist'
 DEB_NAME = 'python-bdist'
-RELEASE_FILE = 'docs/RELEASE.rst'
+RELEASE_FILE = 'RELEASE.rst'
 LANGS = ['pt_BR']
 
 PY_SRC = '%s.py' % PY_NAME
 DEPENDS = ['fakeroot', 'lintian', 'help2man', 'build-essential',
     'python-twitter', 'python-simplejson', 'pychecker',
     'python-docutils', 'python-nose', 'aspell', 'aspell-en', 'python-polib',
+    'python-apt'
     ]
 MENU_SUBSECTION = ''
 DEPENDS_STR = ' '.join(DEPENDS)
 AUTHOR_NAME = 'Scott Kirkwood'
 COPYRIGHT_NAME = 'Google Inc.'
 GOOGLE_CODE_EMAIL = 'scott@forusers.com'
-KEYWORDS = ['python', 'utility', 'library']
+VCS = 'http://%s.code.google.com/hg' % NAME
 
 SETUP = dict(
   name=NAME,
@@ -32,11 +33,15 @@ SETUP = dict(
   packages=['pybdist'],
   package_dir={
       'pybdist': 'src/pybdist'},
+  package_data = {
+      'pybdist': [
+          '*.txt', 'locale/**/*/*.mo'],
+  },
   author=AUTHOR_NAME,
-  author_email='scott+pybdist@forusers.com',
+  author_email='scott@forusers.com',
   platforms=['POSIX'],
   license='Apache 2.0',
-  keywords=' '.join(KEYWORDS),
+  keywords=['python', 'utility', 'library'],
   url='http://code.google.com/p/%s' % NAME,
   download_url='http://%s.googlecode.com/files/%s-%s.zip' % (NAME, NAME, VER),
   description=_('Python Build Distribution Library (pybdist)'),

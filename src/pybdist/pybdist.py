@@ -23,7 +23,7 @@ You'll also need ~/.netrc ~/.ssh/<fname>
 """
 
 __author__ = 'Scott Kirkwood (scott+pybdist@forusers.com)'
-__version__ = '0.2.11'
+__version__ = '0.2.13'
 
 import codecs
 import getpass
@@ -106,10 +106,6 @@ def get_and_verify_versions(setup):
   changelog_ver, _, _ = release.parse_deb_changelog(
       'debian/changelog')
 
-  gc_ver, _, _ = release.get_last_google_code_version(setup.NAME)
-
-  pypi_ver, _, _ = pypi_list.get_latest_version(setup.NAME)
-
   if (setup_ver != source_ver or setup_ver != rel_ver
       or setup_ver != changelog_ver):
     print '** Local setup versions don\'t agree'
@@ -117,18 +113,24 @@ def get_and_verify_versions(setup):
     print '** %s/%s = %r' % (setup.DIR, setup.PY_SRC, source_ver)
     print '** %s = %r' % (setup.RELEASE_FILE, rel_ver)
     print '** %s = %r' % ('debian/changelog', changelog_ver)
-    print '** code.google.com = %r' % gc_ver
     raise PyBdistException('Setup versions don\'t agree')
   print '   Local setup versions agree'
+  return setup_ver
+
+def verify_remote_versions(setup):
+  """Examine the remote versions."""
+  setup_ver = setup.VER
+  gc_ver, _, _ = release.get_last_google_code_version(setup.NAME)
+  pypi_ver, _, _ = pypi_list.get_latest_version(setup.NAME)
   if gc_ver and gc_ver == setup_ver:
     print '   code.google.com version is up-to-date'
   else:
     print '** Note: code.google.com version is at %r and needs to be uploaded' % gc_ver
+
   if pypi_ver and pypi_ver == setup_ver:
     print '   pypi version is up-to-date'
   else:
     print '** Note: pypi.python.org version is at %r and needs to be uploaded' % pypi_ver
-  return setup_ver
 
 
 def _parse_last_release(setup):
@@ -544,6 +546,8 @@ def handle_standard_options(options, setup):
     check_for_errors(setup)
     print
     print_release_info(setup)
+  elif options.check_remote:
+    verify_remote_versions(setup)
   elif options.test:
     test_code(setup)
   elif options.dist:
@@ -564,8 +568,9 @@ def handle_standard_options(options, setup):
     print_release_info(setup)
     announce_on_twitter(setup)
   elif options.missing_docs:
-    documents.out_readme(setup)
     documents.out_license(setup)
+    documents.out_readme(setup)
+    documents.out_install(setup)
   elif options.gettext:
     build_get_text(setup)
     update_po_files(setup)
@@ -581,6 +586,8 @@ def add_standard_options(parser, setup=None):
                     help='Create missing docs.')
   parser.add_option('--check', dest='check', action='store_true',
                     help='Check for errors.')
+  parser.add_option('--check-remote', dest='check_remote', action='store_true',
+                    help='Check remote versions.')
   parser.add_option('--test', dest='test', action='store_true',
                     help='Run nose tests.')
   parser.add_option('--dist', dest='dist', action='store_true',
