@@ -1,17 +1,17 @@
 Metadata-Version: 1.0
 Name: pybdist
-Version: 0.2.11
+Version: 0.2.13
 Summary: Python Build Distribution Library (pybdist)
 Home-page: http://code.google.com/p/pybdist
 Author: Scott Kirkwood
-Author-email: scott+pybdist@forusers.com
+Author-email: scott@forusers.com
 License: Apache 2.0
-Download-URL: http://pybdist.googlecode.com/files/pybdist-0.2.11.zip
+Download-URL: http://pybdist.googlecode.com/files/pybdist-0.2.13.zip
 Description: Library used for personal projects to create a zip, tar and Debian
           distributions.  Assumes folders are in a certain location so might not be
           suitable for other projects. Also supports uploading to code.google.com, pypi,
           
-Keywords: python utility library
+Keywords: python,utility,library
 Platform: POSIX
 Classifier: Development Status :: 3 - Alpha
 Classifier: Intended Audience :: Developers

@@ -47,6 +47,7 @@ class OverwriteFile(object):
     self.fname = fname
     if not os.path.exists(fname):
       raise UpdateFileException('File not found %r' % self.fname)
+    self.old_stat = os.stat(fname).st_mode
     self.fin = open(self.fname, 'r')
     if not self.fin:
       raise UpdateFileException('Unable to open file %r' % self.fname)
@@ -77,6 +78,7 @@ class OverwriteFile(object):
     # Note: This only works correctly on POSIX systems
     # i.e. it overwrites the destination
     os.rename(self.fname_tmp, self.fname)
+    os.chmod(self.fname, self.old_stat)
 
   def __del__(self):
     self.close()
