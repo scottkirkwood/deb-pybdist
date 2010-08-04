@@ -8,7 +8,7 @@ NAME = 'pybdist'
 DIR = 'src/pybdist'
 gettext.install(NAME, DIR + 'locale')
 
-VER = '0.2.13'
+VER = '0.2.15'
 PY_NAME = 'pybdist'
 DEB_NAME = 'python-bdist'
 RELEASE_FILE = 'RELEASE.rst'

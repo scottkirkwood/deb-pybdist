@@ -16,7 +16,10 @@
 # limitations under the License.
 
 import os
-import polib
+try:
+  import polib
+except ImportError:
+  raise ImportError('You need to install polib, try sudo "apt-get install python-polib"')
 import subprocess
 import time
 

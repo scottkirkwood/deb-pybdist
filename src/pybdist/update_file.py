@@ -83,16 +83,23 @@ class OverwriteFile(object):
   def __del__(self):
     self.close()
 
-def insert_before(fname, text):
-  """Inserts `text` at the start of the file."""
+def insert_before(fname, text, del_lines=0):
+  """Inserts `text` at the start of the file.
+  Args:
+    fname: filanem
+    text: text to write
+    del_lines: number of lines to remove from original start of file."""
   update = OverwriteFile()
   update.open(fname)
   update.write(text)
   for line in update.readlines():
+    if del_lines:
+      del_lines -= 1
+      continue
     update.write(line)
   update.close()
 
-def update_lines(fname, regex, replace, max_replaces=1):
+def update_lines(fname, regex, replace, max_replaces=1, min_replaces=1):
   """Looks for `regex` and replaces group(1) with `replace`.
   Note: regex is on a line basis, not multiline.
 
@@ -102,9 +109,9 @@ def update_lines(fname, regex, replace, max_replaces=1):
     replace: The text to replace in group 1.
     max_replaces: Number of replaces expected, for speed and safety.
   """
+  re_f = re.compile(regex)
   update = OverwriteFile()
   update.open(fname)
-  re_f = re.compile(regex)
   num_replaces = 0
   for line in update.readlines():
     if max_replaces > 0:
@@ -121,6 +128,6 @@ def update_lines(fname, regex, replace, max_replaces=1):
         update.write(line)
     else:
       update.write(line)
-  if num_replaces == 0:
-    raise UpdateFileException('No replaces performed on %r' % fname)
+  if num_replaces < min_replaces:
+    raise UpdateFileException('Not enough replacements performed on %r' % fname)
   update.close()
