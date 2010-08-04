@@ -1,0 +1,52 @@
+==================
+Installing pybdist
+==================
+
+Downloading
+-----------
+
+You will always find the latest version at:
+
+  http://code.google.com/p/pybdist/downloads/list
+
+If you prefer you can clone repository from::
+
+  hg clone http://pybdist.code.google.com/hg pybdist
+
+Installation
+------------
+
+To install using ``pip``,::
+
+  $ pip install pybdist
+
+To install using ``easy_install``,::
+
+  $ easy_install pybdist
+
+Dependancies
+------------
+
+This program requires::
+
+* fakeroot          - Gives a fake root environment
+* lintian           - Debian package checker
+* help2man          - Automatic manpage generator
+* build-essential   - Informational list of build-essential packages
+* python-twitter    - Twitter API wrapper for Python
+                      (http://code.google.com/p/python-twitter/)
+* python-simplejson - Simple, fast, extensible JSON encoder/decoder for Python
+                      (http://undefined.org/python/#simplejson)
+* pychecker         - Finds common bugs in Python source code
+* python-docutils   - utilities for the documentation of Python modules
+                      (http://docutils.sourceforge.net/)
+* python-nose       - test discovery and running for Python's unittest
+                      (http://somethingaboutorange.com/mrl/projects/nose/)
+* aspell            - GNU Aspell spell-checker
+                      (http://aspell.net/)
+* aspell-en         - English dictionary for GNU Aspell
+* python-polib      - Python library to parse and manage gettext catalogs
+                      (http://bitbucket.org/izi/polib/src/)
+* python-apt        - Python interface to libapt-pkg
+
+-- arquivo criado pelo `pybdist`.

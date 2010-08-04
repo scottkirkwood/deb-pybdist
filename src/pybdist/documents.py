@@ -45,7 +45,7 @@ LOG = logging.getLogger('pybdist')
 LICENSES = {
   'Apache': (
      #'http://www.apache.org/licenses/LICENSE-2.0.txt',
-     'apache.txt',
+     'apache.rot13',
      r'\[yyyy\]', r'\[name of copyright owner\]'),
   'Artistic': (
       'http://www.perlfoundation.org/attachment/legal/artistic-2_0.txt',
@@ -60,13 +60,13 @@ LICENSES = {
       'http://www.gnu.org/licenses/lgpl.txt',
       '', ''),
   'MIT': (
-      'mit-license.txt',
+      'mit-license.rot13',
       '<year>', '<copyright holders>'),
   'Mozilla': (
       'http://www.mozilla.org/MPL/MPL-1.1.txt',
       '', ''),
   'BSD': (
-      'new-bsd-license.txt',
+      'new-bsd-license.rot13',
       '<YEAR>', '<OWNER>'),
 }
 
@@ -199,6 +199,9 @@ def out_license(setup):
     txt = urllib2.urlopen(url).read()
   else:
     txt = open(os.path.join(os.path.dirname(__file__), url)).read()
+    if url.endswith('rot13'):
+      txt = txt.encode('rot13')
+
   year = time.strftime('%Y', time.localtime())
   re_yyyy = re.compile(y_regex, re.DOTALL)
   txt = re_yyyy.sub(year, txt)

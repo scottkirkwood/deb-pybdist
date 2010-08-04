@@ -46,7 +46,7 @@ def _run_or_die(args, err_mess=None, output=True):
 
 def check_file(fname):
   args = ['rst2html', '--strict', fname, '/dev/null']
-  _run_or_die(args, 'You may need to install pychecker')
+  _run_or_die(args, 'You may need to run "sudo apt-get install python-docutils')
 
 
 def check_text(rst_text):

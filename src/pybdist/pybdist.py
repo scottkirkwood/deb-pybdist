@@ -23,7 +23,7 @@ You'll also need ~/.netrc ~/.ssh/<fname>
 """
 
 __author__ = 'Scott Kirkwood (scott+pybdist@forusers.com)'
-__version__ = '0.2.13'
+__version__ = '0.2.15'
 
 import codecs
 import getpass
@@ -307,10 +307,6 @@ def print_release_info(setup):
   print '-------------'
   print '\n'.join(rel_lines)
   print
-  _, _, changelog_lines = release.parse_deb_changelog('debian/changelog')
-  print 'Changelog'
-  print '---------'
-  print '\n'.join(changelog_lines)
 
 def test_code(setup):
   """Run tests with nosetests."""
@@ -360,7 +356,7 @@ def check_spelling(setup):
   spell_check.check_file(setup.RELEASE_FILE, dictionary)
   spell_check.check_code_file('setup.py', dictionary)
 
-def _maybe_update_file(old_fname, old_ver, new_fname, new_ver, replace_text, regex):
+def _maybe_update_file(old_fname, old_ver, new_fname, new_ver, replace_text, regex, del_lines=0):
   print '%r has version %r and %r has version %r' % (old_fname, old_ver, new_fname, new_ver)
   prompt = 'Update %r?: ' % old_fname
   yn = raw_input(prompt)
@@ -368,7 +364,15 @@ def _maybe_update_file(old_fname, old_ver, new_fname, new_ver, replace_text, reg
     if regex:
       update_file.update_lines(old_fname, regex, replace_text)
     else:
-      update_file.insert_before(old_fname, replace_text)
+      update_file.insert_before(old_fname, replace_text, del_lines)
+
+def _ver_lines_different(lines1, lines2):
+  if len(lines1) != len(lines2):
+    return True
+  for l1, l2 in zip(lines1, lines2):
+    if l1.strip() != l2.strip():
+      return True
+  return False
 
 def _fix_versions_notes(setup):
   ver, date, lines = _parse_last_release(setup)
@@ -378,7 +382,7 @@ def _fix_versions_notes(setup):
   setup_file = 'setup.py'
   release_file = setup.RELEASE_FILE
   changelog_file = 'debian/changelog'
-  changelog_ver, _, _ = release.parse_deb_changelog(changelog_file)
+  changelog_ver, _, cl_lines = release.parse_deb_changelog(changelog_file)
 
   STRING_GROUP = '["\']([^"\']+)["\']'
   EQ = '\s*=\s*'
@@ -386,11 +390,15 @@ def _fix_versions_notes(setup):
     _maybe_update_file(setup_file, setup_ver, release_file, ver,
         ver, r'^VER' + EQ + STRING_GROUP)
 
-  if ver != changelog_ver:
+  if ver != changelog_ver or _ver_lines_different(lines, cl_lines):
     setup.VER = ver
+    if ver == changelog_ver:
+      del_lines = len(cl_lines) + 5
+    else:
+      del_lines = 0
     new_text = '\n'.join(release.out_debian_changelog(setup, lines))
     _maybe_update_file(changelog_file, changelog_ver, release_file, ver,
-        new_text, None)
+        new_text, None, del_lines)
 
   if ver != source_ver:
     _maybe_update_file(source_file, source_ver, release_file, ver,
