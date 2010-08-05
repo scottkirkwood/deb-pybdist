@@ -1,6 +1,10 @@
 Release Notes
 =============
 
+August 4th, 2010 v 0.2.16
+-------------------------
+* Automated git-import and push with --git.
+
 August 4th, 2010 v 0.2.15
 -------------------------
 * When updating changelog, I was off by 5 lines.

@@ -23,7 +23,7 @@ You'll also need ~/.netrc ~/.ssh/<fname>
 """
 
 __author__ = 'Scott Kirkwood (scott+pybdist@forusers.com)'
-__version__ = '0.2.15'
+__version__ = '0.2.16'
 
 import codecs
 import getpass
@@ -209,7 +209,6 @@ def _get_var(setup, var):
 
 def build_deb(setup):
   debian.build_deb(setup)
-
 
 def get_deb_filenames(setup):
   """Returns the list of debian files found in dist/ folder.
@@ -558,6 +557,8 @@ def handle_standard_options(options, setup):
     verify_remote_versions(setup)
   elif options.test:
     test_code(setup)
+  elif options.git:
+    debian.git_import_orig(setup)
   elif options.dist:
     build_man(setup)
     build_zip_tar(setup)
@@ -598,6 +599,8 @@ def add_standard_options(parser, setup=None):
                     help='Check remote versions.')
   parser.add_option('--test', dest='test', action='store_true',
                     help='Run nose tests.')
+  parser.add_option('--git', dest='git', action='store_true',
+                    help='Push to git using gimp-import-orig.')
   parser.add_option('--dist', dest='dist', action='store_true',
                     help='Only build distributions.')
   parser.add_option('--upload', dest='upload', action='store_true',
