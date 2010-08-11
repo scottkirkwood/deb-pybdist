@@ -155,26 +155,41 @@ def _langs(setup):
   else:
     return ['']
 
+def _set_locale(setup, lang):
+  """Set the locale.
+  Args:
+    setup: setup info
+    lang: language to change to ex. 'en'
+  Returns:
+    dot_language if any
+  """
+  global _
+  if lang:
+    dot_lang = '.%s' % lang
+    locale = lang
+  else:
+    dot_lang = ''
+    locale = ''
+  locale_dir = os.path.join(setup.DIR, 'locale')
+  locale_dir = os.path.abspath(locale_dir)
+  gtext = gettext.translation(setup.NAME, locale_dir, languages=[locale],
+    fallback=True)
+  gtext.install(unicode=True)
+  _ = gtext.ugettext
+  return dot_lang
+
 def out_readme(setup):
   langs = _langs(setup)
   eng_desc = setup.SETUP['description']
   eng_long_desc = setup.SETUP['long_description']
   for lang in langs:
-    if lang:
-      dot_lang = '.%s' % lang
-      locale = lang
-    else:
-      dot_lang = ''
-      locale = ''
-    locale_dir = os.path.join(setup.DIR, 'locale')
-    locale_dir = os.path.abspath(locale_dir)
-    if locale:
-      lang = gettext.translation(setup.NAME, locale_dir, languages=[locale])
-      lang.install(unicode=True)
-      setup.SETUP['description'] = lang.ugettext(eng_desc)
-      setup.SETUP['long_description'] = lang.ugettext(eng_long_desc)
+    dot_lang = _set_locale(setup, lang)
     fname = 'README%s.rst' % dot_lang
+    func = _
+    setup.SETUP['description'] = func(eng_desc)
+    setup.SETUP['long_description'] = func(eng_long_desc)
     util._safe_overwrite(_readme_lines(setup), fname)
+  _set_locale(setup, '')
   setup.SETUP['description'] = eng_desc
   setup.SETUP['long_description'] = eng_long_desc
 
@@ -254,7 +269,7 @@ def _install_lines(setup):
   lines.append('  $ sudo dpkg -i %s*.deb' % setup.NAME)
   lines.append('')
   lines.append('If you get errors like Package %s depends on XXX;'
-               ' however it is not installed.' % setup.name)
+               ' however it is not installed.' % setup.NAME)
   lines.append('')
   lines.append('  $ sudo apt-get -f install')
   lines.append('Should install everything you need, then run:')
@@ -275,19 +290,10 @@ def _install_lines(setup):
 def out_install(setup):
   langs = _langs(setup)
   for lang in langs:
-    if lang:
-      dot_lang = '.%s' % lang
-      locale = lang
-    else:
-      dot_lang = ''
-      locale = ''
-    locale_dir = os.path.join(setup.DIR, 'locale')
-    locale_dir = os.path.abspath(locale_dir)
-    if locale:
-      lang = gettext.translation(setup.NAME, locale_dir, languages=[locale])
-      lang.install(unicode=True)
+    dot_lang = _set_locale(setup, lang)
     fname = 'INSTALL%s.rst' % dot_lang
     util._safe_overwrite(_install_lines(setup), fname)
+  _set_locale(setup, '')
 
 if __name__ == '__main__':
   import sys

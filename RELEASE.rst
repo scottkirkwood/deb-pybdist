@@ -1,6 +1,14 @@
 Release Notes
 =============
 
+August 10th, 2010 v 0.3.1
+-------------------------
+* Rot13 files missing from debian distribution.
+
+August 10th, 2010 v 0.3
+-----------------------
+* Added ability to an make an announcement to a mailing list.
+
 August 4th, 2010 v 0.2.16
 -------------------------
 * Automated git-import and push with --git.
