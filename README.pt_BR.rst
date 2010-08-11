@@ -4,7 +4,7 @@ Pybdist
 
 Um biblioteca para construir distribuições escrito em Python.
 
-Biblioteca feito para meus projetos pessoais.  Ele cria zip, tar e Debian
+Um biblioteca feito para meus projetos pessoais.  Ele cria zip, tar e Debian
 distribuições. Pode ser difícil a utilizar em seus projetos porque precisa que o
 formato especifico.
 

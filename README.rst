@@ -4,9 +4,10 @@ Pybdist
 
 Python Build Distribution Library (pybdist)
 
-Library used for personal projects to create a zip, tar and Debian
+A library used for personal projects to create a zip, tar and Debian
 distributions.  Assumes folders are in a certain location so might not be
 suitable for other projects. Also supports uploading to code.google.com, pypi,
+mercurial, announcing on twitter and mailing lists.
 
 Home Page
 ---------

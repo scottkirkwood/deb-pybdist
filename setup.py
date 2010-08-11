@@ -8,7 +8,7 @@ NAME = 'pybdist'
 DIR = 'src/pybdist'
 gettext.install(NAME, DIR + 'locale')
 
-VER = '0.2.16'
+VER = '0.3.1'
 PY_NAME = 'pybdist'
 DEB_NAME = 'python-bdist'
 RELEASE_FILE = 'RELEASE.rst'
@@ -25,6 +25,7 @@ DEPENDS_STR = ' '.join(DEPENDS)
 AUTHOR_NAME = 'Scott Kirkwood'
 COPYRIGHT_NAME = 'Google Inc.'
 GOOGLE_CODE_EMAIL = 'scott@forusers.com'
+MAILING_LIST = 'pybdist-discuss@googlegroups.com'
 VCS = 'http://%s.code.google.com/hg' % NAME
 
 SETUP = dict(
@@ -35,7 +36,7 @@ SETUP = dict(
       'pybdist': 'src/pybdist'},
   package_data = {
       'pybdist': [
-          '*.txt', 'locale/**/*/*.mo'],
+          '*.txt', '*.rot13', 'locale/**/*/*.mo'],
   },
   author=AUTHOR_NAME,
   author_email='scott@forusers.com',
@@ -45,10 +46,10 @@ SETUP = dict(
   url='http://code.google.com/p/%s' % NAME,
   download_url='http://%s.googlecode.com/files/%s-%s.zip' % (NAME, NAME, VER),
   description=_('Python Build Distribution Library (pybdist)'),
-  long_description=_("""Library used for personal projects to create a zip, tar and Debian
-  distributions.  Assumes folders are in a certain location so might not be
-  suitable for other projects. Also supports uploading to code.google.com, pypi,
-  """),
+  long_description=_("""A library used for personal projects to create a zip, tar and Debian
+distributions.  Assumes folders are in a certain location so might not be
+suitable for other projects. Also supports uploading to code.google.com, pypi,
+mercurial, announcing on twitter and mailing lists."""),
   classifiers=[ # see http://pypi.python.org/pypi?:action=list_classifiers
       'Development Status :: 3 - Alpha',
       'Intended Audience :: Developers',

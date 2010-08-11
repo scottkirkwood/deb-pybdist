@@ -23,7 +23,7 @@ You'll also need ~/.netrc ~/.ssh/<fname>
 """
 
 __author__ = 'Scott Kirkwood (scott+pybdist@forusers.com)'
-__version__ = '0.2.16'
+__version__ = '0.3.1'
 
 import codecs
 import getpass
@@ -42,6 +42,7 @@ import debian
 import documents
 import googlecode_update
 import i18n
+import mailinglist
 import mercurial
 import pypi_list
 import rst_check
@@ -570,6 +571,8 @@ def handle_standard_options(options, setup):
   elif options.pypi:
     print_release_info(setup)
     upload_to_pypi(setup)
+  elif options.mail:
+    mailinglist.mail(setup)
   elif options.freshmeat:
     print_release_info(setup)
     announce_on_freshmeat(setup)
@@ -607,6 +610,9 @@ def add_standard_options(parser, setup=None):
                     help='Only upload to google code.')
   parser.add_option('--pypi', dest='pypi', action='store_true',
                     help='Only upload to pypi')
+  if setup and hasattr(setup, 'MAILING_LIST'):
+    parser.add_option('--mail', dest='mail', action='store_true',
+                      help='Announce to mailing list.')
   parser.add_option('--freshmeat', dest='freshmeat', action='store_true',
                     help='Announce on freshmeat')
   parser.add_option('--twitter', dest='twitter', action='store_true',

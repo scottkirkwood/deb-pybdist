@@ -1,33 +1,43 @@
 ==================
-Installing pybdist
+Instalando pybdist
 ==================
 
 Downloading
 -----------
 
-You will always find the latest version at:
+Você vai achar a ultima versão no:
 
   http://code.google.com/p/pybdist/downloads/list
 
-If you prefer you can clone repository from::
+Se prefere, pode clonar o repositório::
 
   hg clone http://pybdist.code.google.com/hg pybdist
 
-Installation
-------------
+Instalação
+----------
 
-To install using ``pip``,::
+Para instalar utilizando ``pip``,::
 
   $ pip install pybdist
 
-To install using ``easy_install``,::
+Para instalar utilizando ``easy_install``,::
 
   $ easy_install pybdist
 
-Dependancies
+Para instalar no pacote .deb::
+
+  $ sudo dpkg -i pybdist*.deb
+
+If you get errors like Package pybdist depends on XXX; however it is not installed.
+
+  $ sudo apt-get -f install
+Should install everything you need, then run:
+  $ sudo dpkg -i pybdist*.deb # again
+
+Dependências
 ------------
 
-This program requires::
+Este programa preciso::
 
 * fakeroot          - Gives a fake root environment
 * lintian           - Debian package checker

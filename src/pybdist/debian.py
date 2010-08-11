@@ -166,7 +166,7 @@ def git_import_orig(setup):
   """Run git_import_orig in the directory."""
   old_cwd = os.getcwd()
   os.chdir(os.path.join(_get_deb_dir(), '..', setup.NAME))
-  args = ['git-import-orig',
+  args = ['git-import-orig', '--pristine-tar',
     '../../%s/%s_%s.orig.tar.gz' % (_get_deb_dir(), setup.NAME, setup.VER),
     ]
   _run_or_die(args)
@@ -174,7 +174,7 @@ def git_import_orig(setup):
   args = ['git', 'push', 'origin', 'master']
   _run_or_die(args)
 
-  args = ['git', 'push' '--tags']
+  args = ['git', 'push', '--tags']
   _run_or_die(args)
 
   os.chdir(old_cwd)
