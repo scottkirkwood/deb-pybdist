@@ -18,6 +18,7 @@
 Works on linux only.
 """
 
+from __future__ import absolute_import
 __author__ = 'Scott Kirkwood (scott+pybdist@forusers.com)'
 
 import re

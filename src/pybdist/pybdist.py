@@ -22,32 +22,36 @@ sudo apt-get install help2man fakeroot python-twitter python-simplejson
 You'll also need ~/.netrc ~/.ssh/<fname>
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
+from six.moves import zip
+from six.moves import input
 __author__ = 'Scott Kirkwood (scott+pybdist@forusers.com)'
 __version__ = '0.3.1'
 
 import codecs
 import getpass
 import glob
-import httplib
+import six.moves.http_client
 import netrc
 import os
 import re
-import release
+from . import release
 import shutil
 import simplejson
 import subprocess
 import twitter
 
-import debian
-import documents
-import googlecode_update
-import i18n
-import mailinglist
-import mercurial
-import pypi_list
-import rst_check
-import spell_check
-import update_file
+from . import debian
+from . import documents
+from . import googlecode_update
+from . import i18n
+from . import mailinglist
+from . import mercurial
+from . import pypi_list
+from . import rst_check
+from . import spell_check
+from . import update_file
 
 class PyBdistException(Exception):
   pass
@@ -75,10 +79,10 @@ def _run_or_die(args, err_mess=None, output=True):
     output: output the command before running
   """
   if output:
-    print ' '.join(args)
+    print((' '.join(args)))
   try:
     ret = subprocess.call(args)
-  except OSError, oserr:
+  except OSError as oserr:
     mess = 'Error running: %r: %r' % (' '.join(args), oserr)
     if err_mess:
       mess += '\n' + err_mess
@@ -109,13 +113,13 @@ def get_and_verify_versions(setup):
 
   if (setup_ver != source_ver or setup_ver != rel_ver
       or setup_ver != changelog_ver):
-    print '** Local setup versions don\'t agree'
-    print '** setup.py = %r' % setup_ver
-    print '** %s/%s = %r' % (setup.DIR, setup.PY_SRC, source_ver)
-    print '** %s = %r' % (setup.RELEASE_FILE, rel_ver)
-    print '** %s = %r' % ('debian/changelog', changelog_ver)
+    print('** Local setup versions don\'t agree')
+    print('** setup.py = %r' % setup_ver)
+    print('** %s/%s = %r' % (setup.DIR, setup.PY_SRC, source_ver))
+    print('** %s = %r' % (setup.RELEASE_FILE, rel_ver))
+    print('** %s = %r' % ('debian/changelog', changelog_ver))
     raise PyBdistException('Setup versions don\'t agree')
-  print '   Local setup versions agree'
+  print('   Local setup versions agree')
   return setup_ver
 
 def verify_remote_versions(setup):
@@ -124,14 +128,14 @@ def verify_remote_versions(setup):
   gc_ver, _, _ = release.get_last_google_code_version(setup.NAME)
   pypi_ver, _, _ = pypi_list.get_latest_version(setup.NAME)
   if gc_ver and gc_ver == setup_ver:
-    print '   code.google.com version is up-to-date'
+    print('   code.google.com version is up-to-date')
   else:
-    print '** Note: code.google.com version is at %r and needs to be uploaded' % gc_ver
+    print('** Note: code.google.com version is at %r and needs to be uploaded' % gc_ver)
 
   if pypi_ver and pypi_ver == setup_ver:
-    print '   pypi version is up-to-date'
+    print('   pypi version is up-to-date')
   else:
-    print '** Note: pypi.python.org version is at %r and needs to be uploaded' % pypi_ver
+    print('** Note: pypi.python.org version is at %r and needs to be uploaded' % pypi_ver)
 
 
 def _parse_last_release(setup):
@@ -153,7 +157,7 @@ def build_zip_tar(unused_setup):
   args = [
     'python', 'setup.py', 'sdist', '--formats=gztar,zip']
   _run_or_die(args, 'Error building sdist')
-  print 'Built zip and tar'
+  print('Built zip and tar')
 
 
 def upload_to_pypi(unused_setup):
@@ -162,7 +166,7 @@ def upload_to_pypi(unused_setup):
   _run_or_die(args, '\n'.join([
       'Error uploading to pypi',
       'If it\'s the first time, run "python setup.py register"']))
-  print 'Upload to pypi'
+  print('Upload to pypi')
 
 
 def build_man(setup):
@@ -171,7 +175,7 @@ def build_man(setup):
 
   dest_dir = os.path.dirname(setup.MAN_FILE)
   if not os.path.isdir(dest_dir):
-    print 'Making directory %r' % dest_dir
+    print('Making directory %r' % dest_dir)
     os.makedirs(dest_dir)
   langs = ['']
   if hasattr(setup, 'LANGS'):
@@ -199,7 +203,7 @@ def build_man(setup):
         'Failed to build manfile',
         'You may need to install help2man']))
 
-  print 'Built %s.1' % setup.NAME
+  print('Built %s.1' % setup.NAME)
 
 
 def _get_var(setup, var):
@@ -237,7 +241,7 @@ def _clean_doc(setup):
     raise PyBdistException('Missing setup.NAME')
   docs = '/usr/share/doc/%s' % setup.NAME
   if os.path.exists(docs) and os.path.isdir(docs):
-    print 'rm -r %s' % docs
+    print('rm -r %s' % docs)
     shutil.rmtree(docs)
 
 
@@ -246,7 +250,7 @@ def _clean_man(setup):
     raise PyBdistException('Missing setup.NAME')
   man = '/usr/share/man/man1/%s.1.gz' % setup.NAME
   if os.path.exists(man):
-    print 'rm %s' % man
+    print('rm %s' % man)
 
 
 def _clean_scripts(setup):
@@ -257,7 +261,7 @@ def _clean_scripts(setup):
       raise PyBdistException('Missing setup.SETUP.scripts')
     bin_script = '/usr/local/bin/%s' % os.path.basename(script)
     if os.path.exists(bin_script):
-      print 'rm %s' % bin_script
+      print('rm %s' % bin_script)
       os.unlink(bin_script)
 
 
@@ -275,7 +279,7 @@ def _clean_packages(setup):
       continue
     dist_packages = '%s/%s' % (dist_dir, base_dir)
     if os.path.exists(dist_packages):
-      print 'rm -r %s' % dist_packages
+      print('rm -r %s' % dist_packages)
       shutil.rmtree(dist_packages)
     _clean_eggs(dist_dir, setup)
 
@@ -285,10 +289,10 @@ def _clean_eggs(dist_dir, setup):
   for fname in glob.glob(dist_egg):
     if os.path.exists(fname):
       if os.path.isdir(fname):
-        print 'rm -r %s' % fname
+        print('rm -r %s' % fname)
         shutil.rmtree(fname)
       else:
-        print 'rm %s' % fname
+        print('rm %s' % fname)
         os.unlink(fname)
 
 
@@ -302,11 +306,11 @@ def clean_all(setup):
 
 def print_release_info(setup):
   rel_date, rel_lines = parse_last_release(setup)
-  print 'Local version is %r, date %r' % (setup.VER, rel_date)
-  print 'Release notes'
-  print '-------------'
-  print '\n'.join(rel_lines)
-  print
+  print('Local version is %r, date %r' % (setup.VER, rel_date))
+  print('Release notes')
+  print('-------------')
+  print('\n'.join(rel_lines))
+  print()
 
 def test_code(setup):
   """Run tests with nosetests."""
@@ -342,7 +346,7 @@ def check_code(setup):
     args += ['--config', pycheckrc]
   args += files
   _run_or_die(args, 'You may need to install pychecker')
-  print 'Passed pychecker'
+  print('Passed pychecker')
   os.chdir(olddir)
 
 def check_rst(setup):
@@ -357,9 +361,9 @@ def check_spelling(setup):
   spell_check.check_code_file('setup.py', dictionary)
 
 def _maybe_update_file(old_fname, old_ver, new_fname, new_ver, replace_text, regex, del_lines=0):
-  print '%r has version %r and %r has version %r' % (old_fname, old_ver, new_fname, new_ver)
+  print('%r has version %r and %r has version %r' % (old_fname, old_ver, new_fname, new_ver))
   prompt = 'Update %r?: ' % old_fname
-  yn = raw_input(prompt)
+  yn = input(prompt)
   if yn.lower() == 'y':
     if regex:
       update_file.update_lines(old_fname, regex, replace_text)
@@ -411,9 +415,9 @@ def check_for_errors(setup):
   check_rst(setup)
   check_spelling(setup)
   if mercurial.needs_hg_commit(verbose=False):
-    print '** Mercurial needs commit'
+    print('** Mercurial needs commit')
   elif mercurial.needs_hg_push(verbose=False):
-    print '** Mercurial needs push'
+    print('** Mercurial needs push')
   get_and_verify_versions(setup)
   if hasattr(setup, 'LANGS'):
     i18n.count_untranslated(_get_locale_dir(setup), setup.LANGS)
@@ -429,29 +433,29 @@ def get_pass_from(fname):
   fname = os.path.expanduser(fname)
   if os.path.exists(fname):
     mode = os.stat(fname).st_mode
-    if mode & 0077:
-      print 'Change permissions on file first, chmod 600 %r' % fname
+    if mode & 0o077:
+      print('Change permissions on file first, chmod 600 %r' % fname)
       return None
     dirname = os.path.dirname(fname)
     mode = os.stat(dirname).st_mode
-    if mode & 0077:
-      print 'Change permission on directory first, chmod 700 %r' % dirname
+    if mode & 0o077:
+      print('Change permission on directory first, chmod 700 %r' % dirname)
       return None
-    return file(fname).read().rstrip()
+    return open(fname).read().rstrip()
   else:
-    print '%r not found' % fname
+    print('%r not found' % fname)
   return None
 
 
 def upload_to_google_code(setup):
-  print 'Using user %r' % setup.GOOGLE_CODE_EMAIL
+  print('Using user %r' % setup.GOOGLE_CODE_EMAIL)
   password = get_pass_from('~/.ssh/%s' % setup.GOOGLE_CODE_EMAIL)
   if not password:
     # Read password if not loaded from svn config, or on subsequent tries.
-    print 'Please enter your googlecode.com password.'
-    print '** Note that this is NOT your Gmail account password! **'
-    print 'It is the password you use to access repositories,'
-    print 'and can be found here: http://code.google.com/hosting/settings'
+    print('Please enter your googlecode.com password.')
+    print('** Note that this is NOT your Gmail account password! **')
+    print('It is the password you use to access repositories,')
+    print('and can be found here: http://code.google.com/hosting/settings')
     password = getpass.getpass()
   username = setup.GOOGLE_CODE_EMAIL
   files = [
@@ -476,7 +480,7 @@ def upload_to_google_code(setup):
 
 def announce_on_freshmeat(setup):
   """Announce launch on freshmeat."""
-  print 'Announcing on Freshmeat...'
+  print('Announcing on Freshmeat...')
 
   _, _, rel_lines = _parse_last_release(setup)
   rcinfo = netrc.netrc(os.path.expanduser('~/.netrc'))
@@ -497,20 +501,20 @@ def announce_on_freshmeat(setup):
   release_dict = dict(version=setup.VER, changelog='\n'.join(changelog), tag_list=tag)
   path = '/projects/%s/releases.json' % name
   body = codecs.encode(simplejson.dumps(dict(auth_code=auth_code, release=release_dict)))
-  connection = httplib.HTTPConnection('freshmeat.net')
+  connection = six.moves.http_client.HTTPConnection('freshmeat.net')
   connection.request('POST', path, body, {'Content-Type': 'application/json'})
   response = connection.getresponse()
   if response.status == 404:
-    print 'Project %r not found, may have to add FRESHMEAT to setup.py' % name
+    print('Project %r not found, may have to add FRESHMEAT to setup.py' % name)
     raise PyBdistException('Freshmeat project not found, please register.')
   elif  response.status != 201:
-    print 'Request failed: %d %s' % (response.status, response.reason)
+    print('Request failed: %d %s' % (response.status, response.reason))
     raise PyBdistException('Freshmeat upload failed')
-  print 'Done announcing on Freshmeat.'
+  print('Done announcing on Freshmeat.')
 
 
 def announce_on_twitter(setup):
-  print 'Announcing on twitter...'
+  print('Announcing on twitter...')
   rcinfo = netrc.netrc(os.path.expanduser('~/.netrc'))
   auth = rcinfo.authenticators('twitter')
   username = auth[0]
@@ -518,7 +522,7 @@ def announce_on_twitter(setup):
   metadata = dict(version=setup.VER, name=setup.NAME, url=setup.SETUP['url'])
   api = twitter.Api(username=username, password=password)
   api.PostUpdate('Release %(version)s of %(name)s is available from %(url)s' % metadata)
-  print 'Done announcing on twitter.'
+  print('Done announcing on twitter.')
 
 def _get_pot_filename(setup):
   return os.path.join(_get_locale_dir(setup), '%s.pot' % setup.NAME)
@@ -534,7 +538,7 @@ def build_get_text(setup):
 def update_po_files(setup):
   missing = i18n.update_po_files(_get_pot_filename(setup), _get_locale_dir(setup), setup.LANGS)
   for lang, fname in missing:
-    print 'Creating %r' % fname
+    print('Creating %r' % fname)
     i18n.make_empty_po_file(fname, lang, setup)
 
 def compile_po_files(setup):
@@ -552,7 +556,7 @@ def handle_standard_options(options, setup):
     clean_all(setup)
   elif options.check:
     check_for_errors(setup)
-    print
+    print()
     print_release_info(setup)
   elif options.check_remote:
     verify_remote_versions(setup)

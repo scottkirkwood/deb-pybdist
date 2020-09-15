@@ -27,18 +27,20 @@ calling git-import-orig does that
 call push pushes tag etc to git.
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
 import os
 import shutil
 import subprocess
 import textwrap
-import util
+from . import util
 
 class DebianException(Exception):
   pass
 
 def _copy_dir(from_dir, to_dir):
   """Recursively copy all the files from `from_dir` and below to `to_dir`."""
-  print 'Copying from %r to %r' % (from_dir, to_dir)
+  print('Copying from %r to %r' % (from_dir, to_dir))
   os.makedirs(to_dir)
   for fname in os.listdir(from_dir):
     from_name = os.path.join(from_dir, fname)
@@ -55,7 +57,7 @@ def _copy_deb_file_to_dist(from_dir):
     from_name = os.path.join(from_dir, fname)
     if os.path.isfile(from_name) and from_name.endswith('.deb'):
       shutil.copy(from_name, dest_dir)
-      print 'Copied %r to %r' % (fname, dest_dir)
+      print('Copied %r to %r' % (fname, dest_dir))
       return
 
 
@@ -66,13 +68,13 @@ def _move_top_files_to_dir(from_dir, to_dir):
     from_name = os.path.join(from_dir, fname)
     if os.path.isfile(from_name):
       shutil.move(from_name, to_dir)
-  print 'Moved files to %r' % to_dir
+  print('Moved files to %r' % to_dir)
 
 
 def _run_or_die(args, output=True):
   """Run the `args` (a list) or dies."""
   if output:
-    print ' '.join(args)
+    print(' '.join(args))
   ret = subprocess.call(args)
   if ret:
     raise DebianException('Error running: %r' % ' '.join(args))
@@ -95,12 +97,12 @@ def build_deb(setup):
 
   src_tarname = src_tar + '.tar.gz'
   dest_tarname = dest_tar + '.tar.gz'
-  print 'Linking dist/%r to tmp/%r' % (src_tarname, dest_tarname)
+  print('Linking dist/%r to tmp/%r' % (src_tarname, dest_tarname))
   os.symlink(os.path.abspath(os.path.join('dist', src_tarname)),
              os.path.abspath(os.path.join(tmpdir, dest_tarname)))
 
   dest_tarname = dest_tar + '.orig.tar.gz'
-  print 'Linking dist/%r to tmp/%r' % (src_tarname, dest_tarname)
+  print('Linking dist/%r to tmp/%r' % (src_tarname, dest_tarname))
   os.symlink(os.path.abspath(os.path.join('dist', src_tarname)),
              os.path.abspath(os.path.join(tmpdir, dest_tarname)))
 

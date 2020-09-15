@@ -26,6 +26,9 @@ LANGS ex. LANGS = ['pt_BR', 'fr']
 DEPENDS ex. DEPENDS = ['python-twitter']
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
+import six
 __author__ = 'Scott Kirkwood (scott+pybdist@forusers.com)'
 
 import apt
@@ -35,8 +38,8 @@ import os
 import re
 import textwrap
 import time
-import urllib2
-import util
+import six.moves.urllib.request, six.moves.urllib.error, six.moves.urllib.parse
+from . import util
 
 gettext.install('pybdist')
 logging.basicConfig()
@@ -174,7 +177,7 @@ def _set_locale(setup, lang):
   locale_dir = os.path.abspath(locale_dir)
   gtext = gettext.translation(setup.NAME, locale_dir, languages=[locale],
     fallback=True)
-  gtext.install(unicode=True)
+  gtext.install(six.text_type=True)
   _ = gtext.ugettext
   return dot_lang
 
@@ -211,7 +214,7 @@ def out_license(setup):
     LOG.info('License file already exists as %r' % license_fname)
   url, y_regex, name_regex = to_fetch
   if url.startswith('http'):
-    txt = urllib2.urlopen(url).read()
+    txt = six.moves.urllib.request.urlopen(url).read()
   else:
     txt = open(os.path.join(os.path.dirname(__file__), url)).read()
     if url.endswith('rot13'):
@@ -299,7 +302,7 @@ if __name__ == '__main__':
   import sys
   LOG.setLevel(logging.DEBUG)
   setup_dir = os.path.abspath(__file__ + '/../../..')
-  print setup_dir
+  print(setup_dir)
   sys.path.insert(0, setup_dir)
   import setup
   out_readme(setup)

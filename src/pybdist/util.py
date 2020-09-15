@@ -17,6 +17,9 @@
 
 """Utility routines used by pybdist."""
 
+from __future__ import absolute_import
+from __future__ import print_function
+from six.moves import input
 MAGIC_NAME = '`pybdist`'
 
 __author__ = 'Scott Kirkwood (scott+pybdist@forusers.com)'
@@ -70,7 +73,7 @@ def _safe_overwrite(lines, fname):
       return
 
     prompt = 'Update %r?: ' % fname
-    yn = raw_input(prompt)
+    yn = input(prompt)
     if yn.lower() != 'y':
       os.unlink(out_tempname)
       LOG.info('User requested not to overwrite')
@@ -82,4 +85,4 @@ def _safe_overwrite(lines, fname):
     os.rename(fname, backup_name)
   os.rename(out_tempname, fname)
   LOG.info('Wrote %r', fname)
-  print 'Updated %r' % fname
+  print('Updated %r' % fname)

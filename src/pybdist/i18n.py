@@ -15,6 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import
+from __future__ import print_function
 import os
 try:
   import polib
@@ -29,7 +31,7 @@ class I18nException(Exception):
 def _run_or_die(args, output=True):
   """Run the `args` (a list) or dies."""
   if output:
-    print ' '.join(args)
+    print(' '.join(args))
   ret = subprocess.call(args)
   if ret:
     raise I18nException('Error running: %r' % ' '.join(args))
@@ -127,4 +129,4 @@ def count_untranslated(locale_dir, langs):
         po = polib.pofile(pofilename)
         un = po.untranslated_entries()
         if un:
-          print '%r has %d untranslated entries' % (pofilename, len(un))
+          print('%r has %d untranslated entries' % (pofilename, len(un)))

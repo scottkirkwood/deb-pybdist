@@ -14,10 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import
+from __future__ import print_function
 __author__ = 'scott@forusers.com (Scott Kirkwood)'
 
 import re
-import urllib2
+import six.moves.urllib.request, six.moves.urllib.error, six.moves.urllib.parse
 
 def get_latest_version(project_name):
   """Get the version, download fname, and md5 hash.
@@ -32,10 +34,10 @@ def get_latest_version(project_name):
 
   url = 'http://pypi.python.org/pypi/%s/' % project_name
   try:
-    fin = urllib2.urlopen(url)
+    fin = six.moves.urllib.request.urlopen(url)
     text = fin.read()
     fin.close()
-  except urllib2.URLError:
+  except six.moves.urllib.error.URLError:
     text = ''
   # The following url should always exist.
   re_url = re.compile(r'<a href="[^"]*/pypi/%s/([^"]+)">' % project_name, re.DOTALL)
@@ -59,4 +61,4 @@ def get_latest_version(project_name):
   return (ver, fname, md5)
 
 if __name__ == '__main__':
-  print get_latest_version('myzones')
+  print(get_latest_version('myzones'))

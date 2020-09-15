@@ -3,12 +3,14 @@
 # Copyright 20l0 Google Inc. All Rights Reserved.
 #
 
-import googlecode_upload
+from __future__ import absolute_import
+from __future__ import print_function
+from . import googlecode_upload
 import hashlib
 import os
 import sys
 import re
-import urllib2
+import six.moves.urllib.request, six.moves.urllib.error, six.moves.urllib.parse
 
 def get_download_list(project_name):
   """Fetches the list of downloads from an atom feed.
@@ -22,10 +24,10 @@ def get_download_list(project_name):
   """
   url = 'http://code.google.com/feeds/p/%s/downloads/basic' % project_name
   try:
-    fin = urllib2.urlopen(url)
+    fin = six.moves.urllib.request.urlopen(url)
     text = fin.read()
     fin.close()
-  except urllib2.URLError:
+  except six.moves.urllib.error.URLError:
     text = ''
   re_entry = re.compile(r'<entry>(.+?)</entry>', re.DOTALL)
 
@@ -84,12 +86,12 @@ def get_file_details(project_name, fname):
   """
   url = 'http://code.google.com/p/%s/downloads/detail?name=%s' % (
       project_name, fname)
-  print 'Checking SHA1 at %r' % url
+  print('Checking SHA1 at %r' % url)
   try:
-    fin = urllib2.urlopen(url, timeout=200)
+    fin = six.moves.urllib.request.urlopen(url, timeout=200)
     text = fin.read()
     fin.close()
-  except urllib2.HTTPError:
+  except six.moves.urllib.error.HTTPError:
     text = ''
   sha1 = _safe_search(r'SHA1 Checksum: ([^<]+)', text, re.DOTALL)
   if sha1:
@@ -108,13 +110,13 @@ def get_file_details(project_name, fname):
 def download_file(project_name, fname, dist_dir):
   """Downloads to file to distdir."""
   url = 'http://%s.googlecode.com/files/%s' % (project_name, fname)
-  fin = urllib2.urlopen(url, timeout=200)
+  fin = six.moves.urllib.request.urlopen(url, timeout=200)
   text = fin.read()
   fin.close()
   outfilename = os.path.join(dist_dir, fname)
   if not os.path.exists(dist_dir):
     os.makedirs(dist_dir)
-  fout = file(outfilename, 'wb')
+  fout = open(outfilename, 'wb')
   fout.write(text)
   fout.close()
 
@@ -132,7 +134,7 @@ def maybe_download_file(project_name, fname, dist_dir):
   else:
     hex_digext = '-'
   if hex_digest == details['sha1']:
-    print 'SHA1 checksums don\'t match, dowloading.'
+    print('SHA1 checksums don\'t match, dowloading.')
     download_file(project_name, fname, dist_dir)
 
 
@@ -151,18 +153,18 @@ def maybe_upload_file(project_name, dist_dir, fname,
     hex_digest = '-'
   if not details['sha1'] or hex_digest != details['sha1']:
     if details['sha1']:
-      print 'SHA1 checksums don\'t match, uploading %r.' % fname
+      print('SHA1 checksums don\'t match, uploading %r.' % fname)
     else:
-      print 'File not there, uploading %r.' % fname
+      print('File not there, uploading %r.' % fname)
     status, reason, url= googlecode_upload.upload(
       os.path.join(dist_dir, fname), project_name, username, password, summary, labels)
     if not url:
-      print '%r, %r' % (status, reason)
-      print '%r, %r, %r, %r' % (os.path.join(dist_dir, fname), project_name, summary, labels)
+      print('%r, %r' % (status, reason))
+      print('%r, %r, %r, %r' % (os.path.join(dist_dir, fname), project_name, summary, labels))
       #print '%r, %r' % (username, password)
       sys.exit(-1)
   else:
-    print 'Checksums match, not uploading %r.' % fname
+    print('Checksums match, not uploading %r.' % fname)
 
 
 def update_file(info, dist_dir, username, password):
@@ -176,7 +178,7 @@ def update_file(info, dist_dir, username, password):
     dist_dir: the destination filename that must exist.
     username: username to use
   """
-  print 'Updating %s' % info['fname']
+  print('Updating %s' % info['fname'])
   googlecode_upload.upload(
       '%s/%s' % (dist_dir, info['fname']),
       info['project_name'], username, password, info['summary'], info['labels'])
@@ -200,23 +202,23 @@ def remove_featured_labels(project_name, user_name, password, except_list=None):
       continue
     fname = os.path.join('dist', item['fname'])
     if not os.path.exists(fname):
-      print 'Dowloading %r' % fname
+      print('Dowloading %r' % fname)
       download_file(project_name, item['fname'], dist_dir)
     else:
-      print 'Checking if I need to dowload %r' % fname
+      print('Checking if I need to dowload %r' % fname)
       maybe_download_file(project_name, item['fname'], dist_dir)
 
   for item in lst:
     if except_list and item['fname'] in except_list:
       continue
     item['labels'].remove('Featured')
-    print 'Removing "Featured" from %r' % item['fname']
+    print('Removing "Featured" from %r' % item['fname'])
     update_file(item, dist_dir, user_name, password)
 
 if __name__ == '__main__':
   import getpass
   USERNAME = 'scott@forusers.com'
-  print 'Enter your googlecode password for %r' % USERNAME
+  print('Enter your googlecode password for %r' % USERNAME)
   PASSWORD = getpass.getpass()
   remove_featured_labels('pybdist', USERNAME, PASSWORD)
 

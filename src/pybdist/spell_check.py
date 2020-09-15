@@ -21,6 +21,8 @@ May open a spell check window.
 
 Creates or uses a spell check file given.
 """
+from __future__ import absolute_import
+from __future__ import print_function
 __author__ = 'Scott Kirkwood (scott+pybdist@forusers.com)'
 
 import os
@@ -38,10 +40,10 @@ def _run_or_die(args, err_mess=None, output=True):
     output: output the command before running
   """
   if output:
-    print ' '.join(args)
+    print(' '.join(args))
   try:
     ret = subprocess.call(args)
-  except OSError, oserr:
+  except OSError as oserr:
     mess = 'Error running: %r: %r' % (' '.join(args), oserr)
     if err_mess:
       mess += '\n' + err_mess
