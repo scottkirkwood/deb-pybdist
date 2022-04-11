@@ -78,7 +78,7 @@ def check_code_file(fname, dictionary):
 
 def check_text(text, dictionary):
   t_out, fname_tmp = tempfile.mkstemp('txt')
-  os.write(t_out, text)
+  os.write(t_out, bytes(text, 'utf-8'))
   os.close(t_out)
   check_file(fname_tmp, dictionary)
   os.unlink(fname_tmp)

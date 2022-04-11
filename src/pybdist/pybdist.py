@@ -17,7 +17,7 @@
 """
 
 You'll need:
-sudo apt-get install help2man fakeroot python-twitter python-simplejson
+sudo apt-get install help2man fakeroot python3-twitter python3-simplejson
 
 You'll also need ~/.netrc ~/.ssh/<fname>
 """
@@ -193,8 +193,7 @@ def build_man(setup):
       locale = lang
     args = [
       'help2man',
-      '%s/%s' % (setup.DIR, setup.PY_SRC),
-      #'%s' % setup.NAME,
+      f'{setup.MAN_HELP}',
       '--locale', locale,
       '-N', # no pointer to TextInfo
       '-i', include_file,
@@ -325,11 +324,11 @@ def test_code(setup):
     noserc = os.path.abspath(fname)
   else:
     noserc = None
-  args = ['nosetests']
+  args = ['nosetests3']
   if noserc:
     args += ['--config', noserc]
   args += dirs
-  _run_or_die(args, 'You may need to install python-nose')
+  _run_or_die(args, 'You may need to install python3-nose')
 
 def check_code(setup):
   """Check the source code for errors."""
@@ -341,12 +340,13 @@ def check_code(setup):
   os.chdir(setup.DIR)
   files = glob.glob('*.py') + glob.glob('*/*.py') + glob.glob('*/*/*.py')
 
-  args = ['pychecker', '--quiet', '--limit', '30']
+  args = ['pylint']
   if pycheckrc:
     args += ['--config', pycheckrc]
+
   args += files
-  _run_or_die(args, 'You may need to install pychecker')
-  print('Passed pychecker')
+  _run_or_die(args, 'You may need to install pylint')
+  print('Passed pylint')
   os.chdir(olddir)
 
 def check_rst(setup):
@@ -411,7 +411,7 @@ def _fix_versions_notes(setup):
 
 def check_for_errors(setup):
   _fix_versions_notes(setup)
-  check_code(setup)
+  #check_code(setup)
   check_rst(setup)
   check_spelling(setup)
   if mercurial.needs_hg_commit(verbose=False):

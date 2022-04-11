@@ -21,7 +21,7 @@ import os
 try:
   import polib
 except ImportError:
-  raise ImportError('You need to install polib, try sudo "apt-get install python-polib"')
+  raise ImportError('You need to install polib, try sudo "apt-get install python3-polib"')
 import subprocess
 import time
 

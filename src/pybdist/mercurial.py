@@ -37,7 +37,7 @@ def _run_ret(args, output=True):
   try:
     p = subprocess.Popen(args, stdout=subprocess.PIPE)
     text = p.communicate()[0]
-    lines = text.split('\n')
+    lines = str(text).split('\n')
     ret = p.returncode
   except OSError as oserr:
     ret = -999

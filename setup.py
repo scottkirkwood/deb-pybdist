@@ -8,7 +8,7 @@ NAME = 'pybdist'
 DIR = 'src/pybdist'
 gettext.install(NAME, DIR + 'locale')
 
-VER = '0.3.1'
+VER = '0.4.1'
 PY_NAME = 'pybdist'
 DEB_NAME = 'python-bdist'
 RELEASE_FILE = 'RELEASE.rst'
@@ -16,9 +16,9 @@ LANGS = ['pt_BR']
 
 PY_SRC = '%s.py' % PY_NAME
 DEPENDS = ['fakeroot', 'lintian', 'help2man', 'build-essential',
-    'python-twitter', 'python-simplejson', 'pychecker',
-    'python-docutils', 'python-nose', 'aspell', 'aspell-en', 'python-polib',
-    'python-apt'
+    'python3-twitter', 'python3-simplejson', 'pychecker',
+    'python3-docutils', 'python3-nose', 'aspell', 'aspell-en', 'python3-polib',
+    'python3-apt'
     ]
 MENU_SUBSECTION = ''
 DEPENDS_STR = ' '.join(DEPENDS)

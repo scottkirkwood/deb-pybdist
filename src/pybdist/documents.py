@@ -23,7 +23,7 @@ SETUP ex. SETUP = { 'name': 'pybdist, ... }
 
 Optional:
 LANGS ex. LANGS = ['pt_BR', 'fr']
-DEPENDS ex. DEPENDS = ['python-twitter']
+DEPENDS ex. DEPENDS = ['python3-twitter']
 """
 
 from __future__ import absolute_import
@@ -177,7 +177,7 @@ def _set_locale(setup, lang):
   locale_dir = os.path.abspath(locale_dir)
   gtext = gettext.translation(setup.NAME, locale_dir, languages=[locale],
     fallback=True)
-  gtext.install(six.text_type=True)
+  gtext.install(unicode=True)
   _ = gtext.ugettext
   return dot_lang
 

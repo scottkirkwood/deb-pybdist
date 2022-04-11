@@ -25,6 +25,12 @@ On any error it exit's.
 
 calling git-import-orig does that
 call push pushes tag etc to git.
+
+
+Note to self if you see `no upstream tarball found at ...`, try:
+``` 
+dpkg-buildpackage -b -rfakeroot -us -uc
+```
 """
 
 from __future__ import absolute_import
@@ -40,7 +46,7 @@ class DebianException(Exception):
 
 def _copy_dir(from_dir, to_dir):
   """Recursively copy all the files from `from_dir` and below to `to_dir`."""
-  print('Copying from %r to %r' % (from_dir, to_dir))
+  print(f'Copying from {from_dir!r} to {to_dir!r}')
   os.makedirs(to_dir)
   for fname in os.listdir(from_dir):
     from_name = os.path.join(from_dir, fname)
@@ -57,7 +63,7 @@ def _copy_deb_file_to_dist(from_dir):
     from_name = os.path.join(from_dir, fname)
     if os.path.isfile(from_name) and from_name.endswith('.deb'):
       shutil.copy(from_name, dest_dir)
-      print('Copied %r to %r' % (fname, dest_dir))
+      print(f'Copied {fname!r} to {dest_dir!r}')
       return
 
 
@@ -68,7 +74,7 @@ def _move_top_files_to_dir(from_dir, to_dir):
     from_name = os.path.join(from_dir, fname)
     if os.path.isfile(from_name):
       shutil.move(from_name, to_dir)
-  print('Moved files to %r' % to_dir)
+  print(f'Moved files from {from_dir!r} to {to_dir!r}')
 
 
 def _run_or_die(args, output=True):
@@ -110,7 +116,9 @@ def build_deb(setup):
           os.path.join('dist', dest_dir + '.tar.gz')]
   _run_or_die(args)
   old_cwd = os.getcwd()
-  os.chdir(os.path.join(tmpdir, dest_dir))
+  subfolder = os.path.join(tmpdir, dest_dir)
+  print(f'Change to subfolder {subfolder!r}')
+  os.chdir(subfolder)
   args = ['debuild',
       '--lintian-opts', '--info', '--display-info', '--display-experimental',
       '--color', 'always',
@@ -122,11 +130,13 @@ def build_deb(setup):
   debdir = _get_deb_dir()
 
   # Example removes ./debian-squeeze/sid/ on down.
+  print(f"Removing folder {debdir!r}")
   shutil.rmtree(debdir, True)
   _copy_deb_file_to_dist(tmpdir)
   _move_top_files_to_dir(tmpdir, debdir)
 
   # Cleanup tmpdir
+  print(f"Removing folder {tmpdir!r}")
   shutil.rmtree(tmpdir, True)
 
 def control_file(setup):
@@ -142,7 +152,7 @@ def control_file(setup):
   lines.append('Section: python')
   lines.append('Priority: optional')
   lines.append('Maintainer: %s <%s>' % (setup.SETUP['author'], setup.SETUP['author_email']))
-  lines.append('Build-Depends: cdbs, debhelper (>= 7), python (>= 2.4), python-support')
+  lines.append('Build-Depends: cdbs, debhelper (>= 7), python3 (>= 3.5)')
   lines.append('Standards-Version: 3.8.4')
   lines.append('Homepage: %s' % setup.SETUP['url'])
   vcs = setup.VCS

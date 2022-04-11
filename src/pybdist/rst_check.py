@@ -48,12 +48,12 @@ def _run_or_die(args, err_mess=None, output=True):
 
 def check_file(fname):
   args = ['rst2html', '--strict', fname, '/dev/null']
-  _run_or_die(args, 'You may need to run "sudo apt-get install python-docutils')
+  _run_or_die(args, 'You may need to run "sudo apt-get install python3-docutils')
 
 
 def check_text(rst_text):
   t_out, fname_tmp = tempfile.mkstemp('rst')
-  os.write(t_out, rst_text)
+  os.write(t_out, bytes(rst_text, 'utf-8'))
   os.close(t_out)
   args = ['rst2html', '--strict', fname_tmp, '/dev/null']
   _run_or_die(args, 'Note: left a tempfile at %r' % fname_tmp)

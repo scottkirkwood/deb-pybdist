@@ -1,6 +1,10 @@
 Release Notes
 =============
 
+April 4th, 2022 v 0.4.1
+-----------------------
+* Updated for python 3 and other fixes
+
 August 10th, 2010 v 0.3.1
 -------------------------
 * Rot13 files missing from debian distribution.

@@ -65,7 +65,7 @@ class OverwriteFile(object):
 
   def write(self, text):
     """Write to the temp file."""
-    os.write(self.t_out, text)
+    os.write(self.t_out, bytes(text, 'utf-8'))
 
   def close(self):
     """Closes the input and output and overwrite self.fname."""
